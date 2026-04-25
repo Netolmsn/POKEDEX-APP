@@ -17,12 +17,12 @@ export default function MapScreen() {
       let loc = await Location.getCurrentPositionAsync({});
       setLocation(loc.coords);
 
-      const randomPins = Array.from({ length: 5 }).map((_, i) => {
+      const randomPins = Array.from({ length: 50 }).map((_, i) => {
         const randomId = Math.floor(Math.random() * 151) + 1;
         return {
           id: i.toString(),
-          latitude: loc.coords.latitude + (Math.random() - 0.5) * 0.01,
-          longitude: loc.coords.longitude + (Math.random() - 0.5) * 0.01,
+          latitude: loc.coords.latitude + (Math.random() - 0.5) * 0.05,
+          longitude: loc.coords.longitude + (Math.random() - 0.5) * 0.05,
           image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${randomId}.png`
         };
       });
