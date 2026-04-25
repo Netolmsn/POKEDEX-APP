@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Image } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useFocusEffect } from '@react-navigation/native';
@@ -17,11 +17,15 @@ export default function MapScreen() {
       let loc = await Location.getCurrentPositionAsync({});
       setLocation(loc.coords);
 
-      const randomPins = Array.from({ length: 5 }).map((_, i) => ({
-        id: i.toString(),
-        latitude: loc.coords.latitude + (Math.random() - 0.5) * 0.02,
-        longitude: loc.coords.longitude + (Math.random() - 0.5) * 0.02,
-      }));
+      const randomPins = Array.from({ length: 5 }).map((_, i) => {
+        const randomId = Math.floor(Math.random() * 151) + 1;
+        return {
+          id: i.toString(),
+          latitude: loc.coords.latitude + (Math.random() - 0.5) * 0.01,
+          longitude: loc.coords.longitude + (Math.random() - 0.5) * 0.01,
+          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${randomId}.png`
+        };
+      });
       setPins(randomPins);
     })();
   }, []);
@@ -58,7 +62,16 @@ export default function MapScreen() {
         showsUserLocation={true}
       >
         {pins.map(pin => (
-          <Marker key={pin.id} coordinate={{ latitude: pin.latitude, longitude: pin.longitude }} pinColor="blue" />
+          <Marker 
+            key={pin.id} 
+            coordinate={{ latitude: pin.latitude, longitude: pin.longitude }}
+          >
+            <Image 
+              source={{ uri: pin.image }} 
+              style={styles.pokemonMarker} 
+              resizeMode="contain"
+            />
+          </Marker>
         ))}
       </MapView>
     </View>
@@ -68,5 +81,9 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   map: { width: '100%', height: '100%' },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' }
+  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  pokemonMarker: {
+    width: 85,
+    height: 85,
+  }
 });
