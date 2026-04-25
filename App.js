@@ -1,20 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { FavoriteProvider } from './src/contexts/FavoriteContext';
+
+import PokemonList from './src/screens/PokemonList';
+import MapScreen from './src/screens/MapScreen';
+import Favorites from './src/screens/Favorites';
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <FavoriteProvider>
+      <NavigationContainer>
+        <Tab.Navigator 
+          screenOptions={{ 
+            tabBarActiveTintColor: '#e3350d', 
+            tabBarInactiveTintColor: 'gray',
+            headerTitleAlign: 'center',
+          }}
+        >
+          <Tab.Screen name="Pokédex" component={PokemonList} />
+          <Tab.Screen name="Mapa" component={MapScreen} />
+          <Tab.Screen name="Favoritos" component={Favorites} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </FavoriteProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
